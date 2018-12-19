@@ -1,0 +1,27 @@
+{
+  "name": "web-components",
+  "version": "1.0.0",
+  "description": "Web components library using browser apis",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xjdesigns/Web-Components.git"
+  },
+  "keywords": [
+    "Web",
+    "components"
+  ],
+  "author": "Jason Jacobson <jdesigns.jason@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xjdesigns/Web-Components/issues"
+  },
+  "homepage": "https://github.com/xjdesigns/Web-Components#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

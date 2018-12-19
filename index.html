@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- // Web components -->
+    <script defer src="../src/icon-button/icon-button.js"></script>
+    <script defer src="../src/number-spinner/number-spinner.js"></script>
+    <script defer src="../src/multi-slider/multi-slider.js"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="segment-css.css">
+    <title>Web Components by Jason Jacobson</title>
+
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <header class="wc-header">
+      <h1>Web Components</h1>
+    </header>
+    <main>
+      <div className="spx-mg-12">
+        <multi-slider values="10,30,60,90"></multi-slider>
+      </div>
+
+      <div className="worker">
+        <number-spinner value="2"></number-spinner>
+      </div>
+    </main>
+  </body>
+</html>
