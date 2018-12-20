@@ -32,7 +32,6 @@ class IconButton extends HTMLElement {
   }
 
   attributeChangedCallback (attrName, oldVal, newVal) {
-    console.warn('arttrName', attrName)
     if (attrName === 'icon') {
       if (this.icon) {
         this.icon = newVal

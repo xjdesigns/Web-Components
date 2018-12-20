@@ -120,7 +120,6 @@ class MultiSlider extends HTMLElement {
       }
     }
 
-    console.warn('thumbs:::', thumbs)
     this.thumbs = thumbs
   }
 
@@ -196,12 +195,14 @@ class MultiSlider extends HTMLElement {
         map[`thumb${idx + 1}`].min = map[`thumb${idx}`].value + 1
       }
     }
+    // Update the value array with the new value
+    this.values[idx] = map[`${this.thumbKey}${idx}`].value
   }
 
   // TODO: I never update the values again....
   // this just dispatches the original values
   dispatchChangeEvent () {
-    const event = new CustomEvent("multiRangeChanged", {
+    const event = new CustomEvent("multiSliderChanged", {
       detail: {
         values: this.values,
       },
