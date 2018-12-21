@@ -30,7 +30,7 @@
   font-size: .875rem;
   border: 1px solid var(--grey-l1);
   border-radius: 12px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /*! Color themes for Google Code Prettify | MIT License | github.com/jmblog/color-themes-for-google-code-prettify */

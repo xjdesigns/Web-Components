@@ -28,7 +28,6 @@ class MultiSlider extends HTMLElement {
 
     this.trackLeft = 0
     this.trackWidth = 0
-    // I need to dynamically handle this
     this.trackMax = 0
 
     this.initializeValues = this.initializeValues.bind(this)
@@ -45,6 +44,8 @@ class MultiSlider extends HTMLElement {
     document.addEventListener('mousemove', this.handleMove)
     document.addEventListener('mouseup', this.stopDrag)
 
+    // TODO: handle mutations of the element when screen changes size
+
     // TODO: This needs to be handled better
     this.track = document.querySelector('.spx-mrange__track')
     this.trackLeft = this.track.offsetLeft
@@ -57,7 +58,12 @@ class MultiSlider extends HTMLElement {
     // destory listeners
     document.removeEventListener('mousemove', this.handleMove)
     document.removeEventListener('mouseup', this.stopDrag)
-    // NOTE: I need to clean up the slider handlers as well
+
+    // clean up the element events
+    const map = this.thumbs
+    for (let key in map) {
+      map[key].element.onmousedown = null
+    }
   }
 
   static get observedAttributes () {
@@ -134,7 +140,7 @@ class MultiSlider extends HTMLElement {
       thumb.classList.add('spx-mrange__thb')
       thumb.setAttribute('id', val.id)
       thumb.setAttribute('style', `left: calc(${val.value}% - 10px)`)
-      thumb.addEventListener('mousedown', this.startDrag)
+      thumb.onmousedown = this.startDrag
       thumbFragment.appendChild(thumb)
 
       // store the element on the map to re use without needing to sniff the DOM
@@ -145,6 +151,7 @@ class MultiSlider extends HTMLElement {
   }
 
   startDrag (ev) {
+    console.warn('is this still here')
     ev.preventDefault()
     const thumbMap = this.thumbs
     this.isDragging = true
@@ -199,8 +206,6 @@ class MultiSlider extends HTMLElement {
     this.values[idx] = map[`${this.thumbKey}${idx}`].value
   }
 
-  // TODO: I never update the values again....
-  // this just dispatches the original values
   dispatchChangeEvent () {
     const event = new CustomEvent("multiSliderChanged", {
       detail: {
@@ -219,6 +224,7 @@ customElements.whenDefined('multi-slider').then(() => {
   console.log('multi-slider defined');
 });
 
+// helper functions
 function percentAsVal (val, max, percent) {
   const valToStep = getPercentOfMax(max, percent)
   const value =  val / valToStep
