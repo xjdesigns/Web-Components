@@ -30,6 +30,10 @@ class MultiSlider extends HTMLElement {
     this.trackWidth = 0
     this.trackMax = 0
 
+    this.debouncer = null //  assign the function to this so we can clean it up
+
+    this.setTrackValues = this.setTrackValues.bind(this)
+    this.updateTrackValues = this.updateTrackValues.bind(this)
     this.initializeValues = this.initializeValues.bind(this)
     this.startDrag = this.startDrag.bind(this)
     this.stopDrag = this.stopDrag.bind(this)
@@ -40,24 +44,22 @@ class MultiSlider extends HTMLElement {
 
   connectedCallback () {
     this.createThumbs()
+    this.setTrackValues()
+
     // setup listeners
     document.addEventListener('mousemove', this.handleMove)
     document.addEventListener('mouseup', this.stopDrag)
 
-    // TODO: handle mutations of the element when screen changes size
-
-    // TODO: This needs to be handled better
-    this.track = document.querySelector('.spx-mrange__track')
-    this.trackLeft = this.track.offsetLeft
-    this.trackWidth = this.track.offsetWidth
-    // I need to dynamically handle this
-    this.trackMax = this.trackWidth - 20
+    // NOTE: we need to recalculate the slider width on resize
+    // Debounce helper added for performance boost
+    window.addEventListener('resize', this.updateTrackValues())
   }
 
   disconnectedCallback () {
     // destory listeners
     document.removeEventListener('mousemove', this.handleMove)
     document.removeEventListener('mouseup', this.stopDrag)
+    window.removeEventListener('resize', this.debouncer)
 
     // clean up the element events
     const map = this.thumbs
@@ -86,6 +88,19 @@ class MultiSlider extends HTMLElement {
 
   createTemplate () {
     return createMultiSlider()
+  }
+
+  setTrackValues () {
+    this.track = document.querySelector('.spx-mrange__track')
+    this.trackLeft = this.track.offsetLeft
+    this.trackWidth = this.track.offsetWidth
+    // I need to dynamically handle this
+    this.trackMax = this.trackWidth - 20
+  }
+
+  updateTrackValues () {
+    this.debouncer = debounce(this.setTrackValues, 500)
+    return this.debouncer
   }
 
   initializeValues (val) {
@@ -151,7 +166,6 @@ class MultiSlider extends HTMLElement {
   }
 
   startDrag (ev) {
-    console.warn('is this still here')
     ev.preventDefault()
     const thumbMap = this.thumbs
     this.isDragging = true
@@ -233,4 +247,20 @@ function percentAsVal (val, max, percent) {
 
 function getPercentOfMax (max, percent) {
   return max * (percent / 100)
+}
+
+function debounce (func, wait, immediate) {
+  let timeout
+  return function () {
+    const context = this
+    const args = arguments
+    const later = function () {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+    const callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
+  }
 }
